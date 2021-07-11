@@ -51,6 +51,10 @@ public class ChunkProcessingConfiguration {
                 .reader(itemReader())
                 .processor(itemProcessor())
                 .writer(itemWriter())
+                .faultTolerant()
+                .skip(NotFoundNameException.class)
+                .skipLimit(2)
+
                 .build();
     }
 
