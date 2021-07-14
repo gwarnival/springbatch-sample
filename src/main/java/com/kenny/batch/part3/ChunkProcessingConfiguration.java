@@ -7,6 +7,7 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemProcessor;
@@ -54,7 +55,6 @@ public class ChunkProcessingConfiguration {
                 .faultTolerant()
                 .skip(NotFoundNameException.class)
                 .skipLimit(2)
-
                 .build();
     }
 
@@ -76,7 +76,9 @@ public class ChunkProcessingConfiguration {
                 .build();
     }
 
-    private Tasklet tasklet() {
+    @Bean
+    @StepScope
+    public Tasklet tasklet() {
         return (stepContribution, chunkContext) -> {
             List<String> items = getItems();
             log.info("task item size: {}", items.size());
